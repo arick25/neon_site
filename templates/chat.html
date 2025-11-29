@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatroom</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body class="chat">
+    <div class="chat-container">
+        <div id="messages" class="messages"></div>
+        <div class="input-area">
+            <input id="msg" autocomplete="off" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        var socket = io();
+        // Grab username + gender from query string
+        const params = new URLSearchParams(window.location.search);
+        var username = params.get("username") || "Guest";
+        var gender = params.get("gender") || "other";
+
+        socket.on('message', function(data){
+            var messages = document.getElementById('messages');
+            var bubble = document.createElement('div');
+            bubble.classList.add('message-bubble');
+
+            if(data.user === username){
+                bubble.classList.add('me');
+            } else {
+                bubble.classList.add('other');
+            }
+
+            var avatar = document.createElement('div');
+            avatar.classList.add('avatar');
+            avatar.textContent = data.user[0].toUpperCase();
+
+            // gender styling
+            if(data.gender === "male") avatar.style.background = "blue";
+            if(data.gender === "female") avatar.style.background = "pink";
+            if(data.gender === "other") avatar.style.background = "gray";
+
+            var text = document.createElement('div');
+            text.classList.add('text');
+            text.textContent = data.msg;
+
+            bubble.appendChild(avatar);
+            bubble.appendChild(text);
+            messages.appendChild(bubble);
+            messages.scrollTop = messages.scrollHeight;
+        });
+
+        function sendMessage(){
+            var msg = document.getElementById('msg').value;
+            socket.emit('message', {user: username, gender: gender, msg: msg});
+            document.getElementById('msg').value = '';
+        }
+    </script>
+</body>
+</html>

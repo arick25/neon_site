@@ -1,0 +1,144 @@
+body {
+    background-color: #FFFF00; /* neon yellow */
+    font-family: "Courier New", monospace;
+    margin: 0;
+    padding: 0;
+}
+
+/* Landing */
+body.landing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.center {
+    text-align: center;
+}
+
+input, select {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+.button {
+    background: black;
+    color: #FFFF00;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Chat */
+body.chat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    background: #fff;
+    width: 100%;
+    max-width: 600px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: #FFFF00;
+}
+
+.message-bubble {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    max-width: 80%;
+}
+
+.message-bubble.me {
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.message-bubble.other {
+    justify-content: flex-start;
+    margin-right: auto;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background: black;
+    color: #FFFF00;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.text {
+    background: #e5e5ea;
+    padding: 10px 15px;
+    border-radius: 20px;
+    word-wrap: break-word;
+}
+
+.message-bubble.me .text {
+    background: black;
+    color: #FFFF00;
+}
+
+.input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background: #fff;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+.input-area button {
+    background: black;
+    color: #FFFF00;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
