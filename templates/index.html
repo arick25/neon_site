@@ -1,21 +1,15 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Neon Portal</title>
+    <title>Welcome</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="landing">
-    <div class="center">
-        <h1>Enter the Signal...</h1>
-        <form action="/chat" method="GET">
-            <input type="text" name="username" placeholder="Choose a username" required>
-            <select name="gender" required>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-            </select>
-            <button type="submit" class="button">Step Inside</button>
-        </form>
-    </div>
+<body>
+    <h1>Welcome to Neon Chat</h1>
+    <p>Real-time chat with sound and notifications.</p>
+    <a href="{{ url_for('chat') }}">
+        <button>Join Chat</button>
+    </a>
 </body>
 </html>

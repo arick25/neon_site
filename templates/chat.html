@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat</title>
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </head>
 <body>
     <h1>Chat Room</h1>
-    <div id="chat"></div>
+    <div id="chat" class="chat-box"></div>
 
     <input id="message" placeholder="Type a message">
     <button onclick="sendMessage()">Send</button>
@@ -23,9 +24,21 @@
         }
 
         socket.on("new_message", function(data) {
-            // Add message to chat box
             const chatBox = document.getElementById("chat");
-            chatBox.innerHTML += `<p><b>${data.user}:</b> ${data.message}</p>`;
+
+            // Create bubble
+            const bubble = document.createElement("div");
+            bubble.classList.add("bubble");
+            if (data.user === "Me") {
+                bubble.classList.add("me");
+            } else {
+                bubble.classList.add("other");
+            }
+            bubble.innerHTML = `<strong>${data.user}:</strong> ${data.message}`;
+            chatBox.appendChild(bubble);
+
+            // Scroll to bottom
+            chatBox.scrollTop = chatBox.scrollHeight;
 
             // Play sound
             document.getElementById("notifSound").play();
@@ -33,8 +46,7 @@
             // Show browser notification
             if (Notification.permission === "granted") {
                 new Notification("New message from " + data.user, {
-                    body: data.message,
-                    icon: "{{ url_for('static', filename='chat_icon.png') }}" // optional icon
+                    body: data.message
                 });
             }
         });
