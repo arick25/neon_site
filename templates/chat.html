@@ -1,60 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chatroom</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <title>Chat</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </head>
-<body class="chat">
-    <div class="chat-container">
-        <div id="messages" class="messages"></div>
-        <div class="input-area">
-            <input id="msg" autocomplete="off" placeholder="Type a message...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
+<body>
+    <h1>Chat Room</h1>
+    <div id="chat"></div>
+
+    <input id="message" placeholder="Type a message">
+    <button onclick="sendMessage()">Send</button>
+
+    <!-- Notification sound -->
+    <audio id="notifSound" src="{{ url_for('static', filename='notification.mp3') }}" preload="auto"></audio>
 
     <script>
-        var socket = io();
-        // Grab username + gender from query string
-        const params = new URLSearchParams(window.location.search);
-        var username = params.get("username") || "Guest";
-        var gender = params.get("gender") || "other";
+        const socket = io();
 
-        socket.on('message', function(data){
-            var messages = document.getElementById('messages');
-            var bubble = document.createElement('div');
-            bubble.classList.add('message-bubble');
+        // Ask for notification permission
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
 
-            if(data.user === username){
-                bubble.classList.add('me');
-            } else {
-                bubble.classList.add('other');
+        socket.on("new_message", function(data) {
+            // Add message to chat box
+            const chatBox = document.getElementById("chat");
+            chatBox.innerHTML += `<p><b>${data.user}:</b> ${data.message}</p>`;
+
+            // Play sound
+            document.getElementById("notifSound").play();
+
+            // Show browser notification
+            if (Notification.permission === "granted") {
+                new Notification("New message from " + data.user, {
+                    body: data.message,
+                    icon: "{{ url_for('static', filename='chat_icon.png') }}" // optional icon
+                });
             }
-
-            var avatar = document.createElement('div');
-            avatar.classList.add('avatar');
-            avatar.textContent = data.user[0].toUpperCase();
-
-            // gender styling
-            if(data.gender === "male") avatar.style.background = "blue";
-            if(data.gender === "female") avatar.style.background = "pink";
-            if(data.gender === "other") avatar.style.background = "gray";
-
-            var text = document.createElement('div');
-            text.classList.add('text');
-            text.textContent = data.msg;
-
-            bubble.appendChild(avatar);
-            bubble.appendChild(text);
-            messages.appendChild(bubble);
-            messages.scrollTop = messages.scrollHeight;
         });
 
-        function sendMessage(){
-            var msg = document.getElementById('msg').value;
-            socket.emit('message', {user: username, gender: gender, msg: msg});
-            document.getElementById('msg').value = '';
+        function sendMessage() {
+            const msg = document.getElementById("message").value;
+            socket.emit("send_message", {user: "Me", message: msg});
+            document.getElementById("message").value = "";
         }
     </script>
 </body>
