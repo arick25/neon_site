@@ -1,15 +1,45 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Welcome</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Landing Page</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to Neon Chat</h1>
-    <p>Real-time chat with sound and notifications.</p>
-    <a href="{{ url_for('chat') }}">
-        <button>Join Chat</button>
-    </a>
+  <div class="landing-page">
+    <h1>Welcome</h1>
+    <form id="userForm">
+      <!-- Username -->
+      <label for="username">Enter Username:</label>
+      <input type="text" id="username" name="username" required>
+
+      <!-- Gender selection -->
+      <label for="gender">Select Gender:</label>
+      <select id="gender" name="gender" required>
+        <option value="">--Choose--</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+
+      <!-- Submit -->
+      <button type="submit">Continue</button>
+    </form>
+  </div>
+
+  <!-- Sound effect -->
+  <audio id="notifySound" src="notification.mp3" preload="auto"></audio>
+
+  <script>
+    const form = document.getElementById('userForm');
+    const sound = document.getElementById('notifySound');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      sound.play(); // play notification.mp3 on submit
+      alert(`Hello ${form.username.value}, you selected ${form.gender.value}`);
+      // Replace alert with redirect if needed:
+      // window.location.href = '/home';
+    });
+  </script>
 </body>
 </html>
